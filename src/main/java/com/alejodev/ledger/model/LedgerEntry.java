@@ -10,7 +10,7 @@ import java.time.Instant;
 import java.util.UUID;
 
 @Entity
-@Table(name = "ledger_entry")
+@Table(name = "ledger_entries")
 @Getter
 @EqualsAndHashCode(of = "id")
 @ToString(exclude = {"transaction", "account"})

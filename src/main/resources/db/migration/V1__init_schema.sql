@@ -31,7 +31,8 @@ CREATE TABLE ledger_entries (
 );
 
 CREATE TABLE idempotency_keys (
-    key VARCHAR(255) PRIMARY KEY,
+    id UUID PRIMARY KEY,
+    idempotency_key VARCHAR(255) NOT NULL UNIQUE,
     request_hash VARCHAR(255) NOT NULL,
     response_body TEXT NOT NULL,
     created_at TIMESTAMP NOT NULL,
