@@ -3,10 +3,8 @@ package com.alejodev.ledger.model;
 
 import com.alejodev.ledger.model.enums.AccountStatus;
 import jakarta.persistence.*;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
+
 
 import java.math.BigDecimal;
 import java.time.Instant;
