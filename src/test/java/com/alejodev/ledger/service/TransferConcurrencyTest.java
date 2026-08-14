@@ -21,7 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class TransferConcurrencyTest {
 
     @Autowired
-    private TransferService transferService;
+    private TransferRetryService transferRetryService;
 
     @Autowired
     private IAccountRepository accountRepository;
@@ -55,7 +55,7 @@ class TransferConcurrencyTest {
                     TransferRequest request = new TransferRequest(
                             sourceId, destId, amountPerTransfer, "Concurrent test"
                     );
-                    transferService.transfer(request, UUID.randomUUID().toString());
+                    transferRetryService.transferWithRetry(request, UUID.randomUUID().toString());  // <-- cambio acá
                     successCount.incrementAndGet();
                 } catch (Exception e) {
                     failureCount.incrementAndGet();

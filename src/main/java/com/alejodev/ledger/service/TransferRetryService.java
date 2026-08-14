@@ -15,11 +15,10 @@ public class TransferRetryService {
     public TransferRetryService(TransferService transferService) {
         this.transferService = transferService;
     }
-
     @Retryable(
             retryFor = OptimisticLockingFailureException.class,
-            maxAttempts = 5,
-            backoff = @Backoff(delay = 50, multiplier = 2)
+            maxAttempts = 10,
+            backoff = @Backoff(delay = 100, multiplier = 2, maxDelay = 2000)
     )
     public Transaction transferWithRetry(TransferRequest request, String idempotencyKey) {
         return transferService.transfer(request, idempotencyKey);
