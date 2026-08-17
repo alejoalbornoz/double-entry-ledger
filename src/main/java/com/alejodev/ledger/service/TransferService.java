@@ -2,6 +2,7 @@ package com.alejodev.ledger.service;
 
 import com.alejodev.ledger.dto.request.TransferRequest;
 import com.alejodev.ledger.exception.AccountNotFoundException;
+import com.alejodev.ledger.exception.DuplicateTransactionException;
 import com.alejodev.ledger.exception.InsufficientFundsException;
 import com.alejodev.ledger.exception.InvalidTransferException;
 import com.alejodev.ledger.model.Account;
@@ -13,6 +14,7 @@ import com.alejodev.ledger.model.enums.TransactionStatus;
 import com.alejodev.ledger.repository.IAccountRepository;
 import com.alejodev.ledger.repository.ILedgerEntryRepository;
 import com.alejodev.ledger.repository.ITransactionRepository;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -78,8 +80,16 @@ public class TransferService {
             throw new InsufficientFundsException(fromAccount.getId(), amount, fromAccount.getBalance());
         }
 
+
         // 1. Crear la Transaction en estado PENDING
         Transaction transaction = new Transaction(idempotencyKey, "TRANSFER", amount, request.description());
+        try {
+            transaction = transactionRepository.save(transaction);
+        } catch (DataIntegrityViolationException e) {
+            // Otro request concurrente con la misma idempotency key ya ganó la carrera
+            // e insertó su Transaction primero. No es un error real — es un retry legítimo.
+            throw new DuplicateTransactionException(idempotencyKey);
+        }
         transaction = transactionRepository.save(transaction);
 
         // 2. Debitar cuenta origen
