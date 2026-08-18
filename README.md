@@ -94,7 +94,7 @@ pgAdmin is available at `http://localhost:5050`.
 - [x] **Phase 2** — Transfer logic with double-entry bookkeeping, verified by integration test
 - [x] **Phase 3** — Concurrency: optimistic locking + retry with backoff, verified by concurrency test with measured results
 - [x] **Phase 4** — Idempotency (in progress): `Idempotency-Key` header support, cached responses via Redis/DB
-- [ ] **Phase 5** — Reconciliation job: scheduled verification that account balances match the sum of their ledger entries
+- [x] **Phase 5** — Reconciliation job: scheduled verification that account balances match the sum of their ledger entries
 
 ## Known trade-offs and things a production system would still need
 
